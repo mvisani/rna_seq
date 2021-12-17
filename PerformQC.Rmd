@@ -1,0 +1,53 @@
+Prepare and load necessary packages
+```{r}
+install.packages("devtools")
+
+library("devtools")
+
+install_github(repo = "lcalviell/Ribo-seQC")
+```
+
+Install required package
+```{r}
+library("RiboseQC")
+```
+
+
+Check the documentation of the package
+```{r}
+?prepare_annotation_files
+```
+
+Prepare genome files (DO IT ONLY ONCE !)
+```{r}
+prepare_annotation_files(annotation_directory = ".",
+                         twobit_file = "Rattus_norvegicus.Rnor_6.0.dna.toplevel.2bit", 
+                         gtf_file = "Rattus_norvegicus.Rnor_6.0.104.gtf.gz",
+                         scientific_name = "Rattus.norvegicus",
+                         annotation_name = "R_nor_6",
+                         export_bed_tables_TxDb = F,
+                         forge_BSgenome = T,
+                         create_TxDb = T)
+```
+
+Create the html report If you look in the documentation of the RiboseQC_analysis, you'll see that for the bam_files parameter, you'll need a vector with the path to our bam files
+```{r}
+
+my_bam <- c("./bam/Biever_Neuropil_Poly_1_clpd_tr_no_r_sno_sn_t-RNA_Rnor_6_sorted.bam",
+            "./bam/Biever_Neuropil_Poly_2_clpd_tr_no_r_sno_sn_t-RNA_Rnor_6_sorted.bam",
+            "./bam/Biever_Neuropil_Poly_3_clpd_tr_no_r_sno_sn_t-RNA_Rnor_6_sorted.bam",
+            "./bam/Biever_Somata_Poly_1_clpd_tr_no_r_sno_sn_t-RNA_Rnor_6_sorted.bam",
+            "./bam/Biever_Somata_Poly_2_clpd_tr_no_r_sno_sn_t-RNA_Rnor_6_sorted.bam",
+            "./bam/Biever_Somata_Poly_3_clpd_tr_no_r_sno_sn_t-RNA_Rnor_6_sorted.bam")
+
+RiboseQC_analysis(annotation_file = "Rattus_norvegicus.Rnor_6.0.104.gtf.gz_Rannot",
+                  bam_files = my_bam,
+                  fast_mode = T,
+                  report_file = "R_nor_QC.html",
+                  sample_names = c("Neuropil_Poly_1", "Neuropil_Poly_2", "Neuropil_Poly_3",
+                                   "Somata_Poly_1", "Somata_Poly_2", "Somata_Poly_3"),
+                  dest_names = c("Neuropil_Poly_1", "Neuropil_Poly_2", "Neuropil_Poly_3",
+                                   "Somata_Poly_1", "Somata_Poly_2", "Somata_Poly_3"),
+                  write_tmp_files = F)
+```
+
